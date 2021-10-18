@@ -44,3 +44,8 @@ tasks:
 
   - name: consumer
     command: mvn exec:java -Dexec.mainClass="io.confluent.examples.clients.cloud.ConsumerExample" -Dexec.args="./ccloud.properties test1"
+
+
+vscode:
+  extensions:
+    - vscjava.vscode-java-pack
