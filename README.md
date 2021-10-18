@@ -9,5 +9,17 @@ You can find the documentation and instructions for running this Java example at
 
 # Run in Gitpod
 
+1. Create a Confuent Cloud account at https://confluent.cloud, create a cluster, and then create a schema registry.
+2. Create a API keys for your cluster and schema registry.
+1. Finally, make sure these environment variables are set at https://gitpod.io/variables and scoped to this repository
+  - `CCLOUD_API_KEY`
+  - `CCLOUD_API_SECRET`
+  - `CCLOUD_BOOTSTRAP_SERVER` (includes kafka port)
+  - `CCLOUD_SR_URL`
+  - `CCLOUD_SR_API_KEY`
+  - `CCLOUD_SR_API_SECRET`
+
+Now you can run your clients in YOUR OWN Confluent Cloud cluster with Gitpod! Enjoy!
+
 [![Open in Gitpod](https://gitpod.io/button/open-in-gitpod.svg)](https://gitpod.io/#https://github.com/chuck-confluent/ccloud-gitpod-demo)
 
