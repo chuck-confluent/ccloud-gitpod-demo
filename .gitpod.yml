@@ -44,23 +44,3 @@ tasks:
 
   - name: consumer
     command: mvn exec:java -Dexec.mainClass="io.confluent.examples.clients.cloud.ConsumerExample" -Dexec.args="./ccloud.properties test1"
-
-  - name: cp-demo
-    command: |
-      if [ -z "$DISABLE_AUTOSTART" ]; then
-        echo "🚀 Starting up cp-demo (you can disable autostart by exporting DISABLE_AUTOSTART environment variable, see https://www.gitpod.io/docs/environment-variables)"
-        ./scripts/start.sh
-        echo "🚀 You can now follow steps in https://docs.confluent.io/platform/current/tutorials/cp-demo/docs/on-prem.html#guided-tutorial"
-      else
-        echo "ℹ️ DISABLE_AUTOSTART environment variable is set, use ./scripts/start.sh to start cp-demo"
-      fi
-      gp sync-done cp-demo
-
-  - name: hybrid cloud
-    command: |
-      gp sync-await cp-demo
-      ./scripts/create-ccloud-workflow.sh
-      sleep 3000 # Let demo run for 50 minutes before tearing down ccloud environment
-      source ./ccloud_library.sh
-      source delta_configs/env.delta
-      ccloud::destroy_ccloud_stack $SERVICE_ACCOUNT_ID
