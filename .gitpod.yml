@@ -21,22 +21,22 @@ tasks:
   - name: create properties
     before: |
       cat<<-EOF>ccloud.properties
-        # Required connection configs for Kafka producer, consumer, and admin
-        bootstrap.servers=$CCLOUD_BOOTSTRAP_SERVER
-        security.protocol=SASL_SSL
-        sasl.jaas.config=org.apache.kafka.common.security.plain.PlainLoginModule   required username='$CCLOUD_API_KEY'   password='$CCLOUD_API_SECRET';
-        sasl.mechanism=PLAIN
-        # Required for correctness in Apache Kafka clients prior to 2.6
-        client.dns.lookup=use_all_dns_ips
+      # Required connection configs for Kafka producer, consumer, and admin
+      bootstrap.servers=$CCLOUD_BOOTSTRAP_SERVER
+      security.protocol=SASL_SSL
+      sasl.jaas.config=org.apache.kafka.common.security.plain.PlainLoginModule   required username='$CCLOUD_API_KEY'   password='$CCLOUD_API_SECRET';
+      sasl.mechanism=PLAIN
+      # Required for correctness in Apache Kafka clients prior to 2.6
+      client.dns.lookup=use_all_dns_ips
 
-        # Best practice for Kafka producer to prevent data loss
-        acks=all
+      # Best practice for Kafka producer to prevent data loss
+      acks=all
 
-        # Required connection configs for Confluent Cloud Schema Registry
-        schema.registry.url=$CCLOUD_SR_URL
-        basic.auth.credentials.source=USER_INFO
-        basic.auth.user.info=$CCLOUD_SR_API_KEY:$CCLOUD_SR_API_SECRET
-        EOF
+      # Required connection configs for Confluent Cloud Schema Registry
+      schema.registry.url=$CCLOUD_SR_URL
+      basic.auth.credentials.source=USER_INFO
+      basic.auth.user.info=$CCLOUD_SR_API_KEY:$CCLOUD_SR_API_SECRET
+      EOF
 
 
   - name: producer
