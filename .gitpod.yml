@@ -13,34 +13,33 @@ github:
 
 tasks:
 
-  # Automatically log in with the ccloud CLI. Could expand on this to automate other setup tasks.
-  - name: ccloud
-    command: ccloud login --save
-
   - name: producer
+    before: gp sync-await properties
     command: mvn exec:java -Dexec.mainClass="io.confluent.examples.clients.cloud.ProducerAvroExample" -Dexec.args="./ccloud.properties test2"
 
   - name: consumer
+    before: gp sync-await properties
     command: mvn exec:java -Dexec.mainClass="io.confluent.examples.clients.cloud.ConsumerAvroExample" -Dexec.args="./ccloud.properties test2"
 
   - name: kafka streams
+    before: gp sync-await properties
     command: mvn exec:java -Dexec.mainClass="io.confluent.examples.clients.cloud.StreamsAvroExample" -Dexec.args="./ccloud.properties test2"
 
-  # Install ccloud CLI and Java project dependencies at build time
-  - name: prebuild
-    before: |
+  # Install ccloud CLI and Java project dependencies at build time, then ccloud login at launch time
+  - name: ccloud
+    init: |
       curl -L --http1.1 https://cnfl.io/ccloud-cli | sudo sh -s -- -b /usr/local/bin && \
         mkdir -p ~/.local/share/bash-completion/ && \
         touch ~/.local/share/bash-completion/ccloud && \
         ccloud completion bash > ~/.local/share/bash-completion/ccloud && \
-        source ~/.local/share/bash-completion/ccloud
-    init: |
-      mvn clean package
+        source ~/.local/share/bash-completion/ccloud && \
+        mvn clean package
+    command: ccloud login --save
 
   # Dynamically configure confluent cloud properties file at launch
   - name: ccloud.properties
     before: |
-      cat<<-EOF>ccloud.properties
+      cat<<-EOF>ccloud.properties && gp sync-done properties
       # Required connection configs for Kafka producer, consumer, and admin
       bootstrap.servers=$CCLOUD_BOOTSTRAP_SERVER
       security.protocol=SASL_SSL
@@ -58,6 +57,7 @@ tasks:
       basic.auth.user.info=$CCLOUD_SR_API_KEY:$CCLOUD_SR_API_SECRET
       EOF
 
-vscode:
-  extensions:
-    - vscjava.vscode-java-pack
+# Annoying build task keeps spinning
+# vscode:
+#   extensions:
+#     - vscjava.vscode-java-pack
