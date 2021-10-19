@@ -14,27 +14,16 @@ github:
 tasks:
 
   - name: producer
-    before: gp sync-await properties
+    before: gp sync-await properties && gp sync-await setup
     command: mvn exec:java -Dexec.mainClass="io.confluent.examples.clients.cloud.ProducerAvroExample" -Dexec.args="./ccloud.properties test2"
 
   - name: consumer
-    before: gp sync-await properties
+    before: gp sync-await properties && gp sync-await setup
     command: mvn exec:java -Dexec.mainClass="io.confluent.examples.clients.cloud.ConsumerAvroExample" -Dexec.args="./ccloud.properties test2"
 
   - name: kafka streams
-    before: gp sync-await properties
+    before: gp sync-await properties && gp sync-await setup
     command: mvn exec:java -Dexec.mainClass="io.confluent.examples.clients.cloud.StreamsAvroExample" -Dexec.args="./ccloud.properties test2"
-
-  # Install ccloud CLI and Java project dependencies at build time, then ccloud login at launch time
-  - name: ccloud
-    before: |
-      curl -L --http1.1 https://cnfl.io/ccloud-cli | sudo sh -s -- -b /usr/local/bin && \
-        mkdir -p ~/.local/share/bash-completion/ && \
-        touch ~/.local/share/bash-completion/ccloud && \
-        ccloud completion bash > ~/.local/share/bash-completion/ccloud && \
-        echo "source ~/.local/share/bash-completion/ccloud" >> ~/.bashrc
-    init: mvn clean package
-    command: ccloud login --save && ccloud environment use $CCLOUD_ENV_ID
 
   # Dynamically configure confluent cloud properties file at launch
   - name: ccloud.properties
@@ -57,7 +46,17 @@ tasks:
       basic.auth.user.info=$CCLOUD_SR_API_KEY:$CCLOUD_SR_API_SECRET
       EOF
 
-# Annoying build task keeps spinning
-# vscode:
-#   extensions:
-#     - vscjava.vscode-java-pack
+  # Install ccloud CLI and Java project dependencies at build time, then ccloud login at launch time
+  - name: ccloud
+    before: |
+      curl -L --http1.1 https://cnfl.io/ccloud-cli | sudo sh -s -- -b /usr/local/bin && \
+        mkdir -p ~/.local/share/bash-completion/ && \
+        touch ~/.local/share/bash-completion/ccloud && \
+        ccloud completion bash > ~/.local/share/bash-completion/ccloud && \
+        echo "source ~/.local/share/bash-completion/ccloud" >> ~/.bashrc
+    init: mvn clean package
+    command: ccloud login --save && ccloud environment use $CCLOUD_ENV_ID && gp sync-done setup
+
+vscode:
+  extensions:
+    - vscjava.vscode-java-pack
