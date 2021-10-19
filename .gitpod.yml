@@ -16,9 +16,8 @@ tasks:
     init: |
       curl -L --http1.1 https://cnfl.io/ccloud-cli | sudo sh -s -- -b /usr/local/bin
       mvn clean package
-      exit
 
-  - name: create properties
+  - name: launch
     before: |
       cat<<-EOF>ccloud.properties
       # Required connection configs for Kafka producer, consumer, and admin
@@ -37,6 +36,7 @@ tasks:
       basic.auth.credentials.source=USER_INFO
       basic.auth.user.info=$CCLOUD_SR_API_KEY:$CCLOUD_SR_API_SECRET
       EOF
+      ccloud login --save
 
 
   - name: producer
@@ -44,7 +44,6 @@ tasks:
 
   - name: consumer
     command: mvn exec:java -Dexec.mainClass="io.confluent.examples.clients.cloud.ConsumerExample" -Dexec.args="./ccloud.properties test1"
-
 
 vscode:
   extensions:
