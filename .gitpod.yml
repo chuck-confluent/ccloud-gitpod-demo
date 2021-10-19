@@ -14,16 +14,19 @@ github:
 tasks:
 
   - name: producer
-    before: gp sync-await properties && gp sync-await setup
-    command: mvn exec:java -Dexec.mainClass="io.confluent.examples.clients.cloud.ProducerAvroExample" -Dexec.args="./ccloud.properties test2"
+    command: |
+      gp sync-await properties && gp sync-await setup
+      mvn exec:java -Dexec.mainClass="io.confluent.examples.clients.cloud.ProducerAvroExample" -Dexec.args="./ccloud.properties test2"
 
   - name: consumer
-    before: gp sync-await properties && gp sync-await setup
-    command: mvn exec:java -Dexec.mainClass="io.confluent.examples.clients.cloud.ConsumerAvroExample" -Dexec.args="./ccloud.properties test2"
+    command: |
+      gp sync-await properties && gp sync-await setup
+      mvn exec:java -Dexec.mainClass="io.confluent.examples.clients.cloud.ConsumerAvroExample" -Dexec.args="./ccloud.properties test2"
 
   - name: kafka streams
-    before: gp sync-await properties && gp sync-await setup
-    command: mvn exec:java -Dexec.mainClass="io.confluent.examples.clients.cloud.StreamsAvroExample" -Dexec.args="./ccloud.properties test2"
+    command: |
+      gp sync-await properties && gp sync-await setup
+      mvn exec:java -Dexec.mainClass="io.confluent.examples.clients.cloud.StreamsAvroExample" -Dexec.args="./ccloud.properties test2"
 
   # Dynamically configure confluent cloud properties file at launch
   - name: ccloud.properties
