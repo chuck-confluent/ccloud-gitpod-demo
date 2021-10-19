@@ -29,9 +29,10 @@ tasks:
   # Install ccloud CLI and Java project dependencies at build time
   - name: prebuild
     init: |
-      curl -L --http1.1 https://cnfl.io/ccloud-cli | sudo sh -s -- -b /usr/local/bin
-      ccloud completion bash > /etc/bash_completion.d/ccloud
-      source /etc/bash_completion.d/ccloud
+      curl -L --http1.1 https://cnfl.io/ccloud-cli | sudo sh -s -- -b /usr/local/bin && \
+        mkdir -p ~/.local/share/bash-completion/ && \
+        ccloud completion bash > ~/.local/share/bash-completion/ccloud && \
+        source ~/.local/share/bash-completion/ccloud
       mvn clean package
 
   # Dynamically configure confluent cloud properties file at launch
