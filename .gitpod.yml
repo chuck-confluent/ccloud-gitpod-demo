@@ -56,6 +56,7 @@ tasks:
         mkdir -p ~/.local/share/bash-completion/ && \
         touch ~/.local/share/bash-completion/ccloud && \
         ccloud completion bash > ~/.local/share/bash-completion/ccloud && \
+        source ~/.local/share/bash-completion/ccloud && \
         echo "source ~/.local/share/bash-completion/ccloud" >> ~/.bashrc
     init: mvn clean package
     command: ccloud login --save && ccloud environment use $CCLOUD_ENV_ID && gp sync-done setup
