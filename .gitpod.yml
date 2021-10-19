@@ -12,12 +12,30 @@ github:
     addCheck: false
 
 tasks:
+
+  # Automatically log in with the ccloud CLI. Could expand on this to automate other setup tasks.
+  - name: ccloud
+    command: ccloud login --save
+
+  - name: producer
+    command: mvn exec:java -Dexec.mainClass="io.confluent.examples.clients.cloud.ProducerAvroExample" -Dexec.args="./ccloud.properties test2"
+
+  - name: consumer
+    command: mvn exec:java -Dexec.mainClass="io.confluent.examples.clients.cloud.ConsumerAvroExample" -Dexec.args="./ccloud.properties test2"
+
+  - name: kafka streams
+    command: mvn exec:java -Dexec.mainClass="io.confluent.examples.clients.cloud.StreamsAvroExample" -Dexec.args="./ccloud.properties test2"
+
+  # Install ccloud CLI and Java project dependencies at build time
   - name: prebuild
     init: |
       curl -L --http1.1 https://cnfl.io/ccloud-cli | sudo sh -s -- -b /usr/local/bin
+      ccloud completion bash > /etc/bash_completion.d/ccloud
+      source /etc/bash_completion.d/ccloud
       mvn clean package
 
-  - name: launch
+  # Dynamically configure confluent cloud properties file at launch
+  - name: ccloud.properties
     before: |
       cat<<-EOF>ccloud.properties
       # Required connection configs for Kafka producer, consumer, and admin
@@ -36,14 +54,6 @@ tasks:
       basic.auth.credentials.source=USER_INFO
       basic.auth.user.info=$CCLOUD_SR_API_KEY:$CCLOUD_SR_API_SECRET
       EOF
-      ccloud login --save
-
-
-  - name: producer
-    command: mvn exec:java -Dexec.mainClass="io.confluent.examples.clients.cloud.ProducerExample" -Dexec.args="./ccloud.properties test1"
-
-  - name: consumer
-    command: mvn exec:java -Dexec.mainClass="io.confluent.examples.clients.cloud.ConsumerExample" -Dexec.args="./ccloud.properties test1"
 
 vscode:
   extensions:
