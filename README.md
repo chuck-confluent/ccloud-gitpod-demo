@@ -26,3 +26,7 @@ Now you can run your clients in YOUR OWN Confluent Cloud cluster with Gitpod! En
 
 [![Open in Gitpod](https://gitpod.io/button/open-in-gitpod.svg)](https://gitpod.io/#https://github.com/chuck-confluent/ccloud-gitpod-demo)
 
+# Video Demonstration
+
+
+[![video demo of confluent cloud based labs using gitpod](https://img.youtube.com/vi/3sy05KH94_0/0.jpg)](https://youtu.be/3sy05KH94_0)
