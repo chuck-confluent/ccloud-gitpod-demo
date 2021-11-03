@@ -13,4 +13,4 @@ RUN curl -L --http1.1 https://cnfl.io/ccloud-cli | sudo sh -s -- -b /usr/local/b
     echo "source /home/gitpod/.local/share/bash-completion/ccloud" >> ~/.bashrc
 
 # build maven project
-RUN mvn clean package
+RUN /home/gitpod/.sdkman/candidates/maven/current/bin/mvn clean package
