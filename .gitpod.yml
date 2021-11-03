@@ -11,21 +11,24 @@ github:
     # configure whether Gitpod registers itself as a status check to pull requests
     addCheck: false
 
+image:
+  file: .gitpod.Dockerfile
+
 tasks:
 
   - name: producer
     command: |
-      gp sync-await properties && gp sync-await setup
+      gp sync-await properties
       mvn exec:java -Dexec.mainClass="io.confluent.examples.clients.cloud.ProducerAvroExample" -Dexec.args="./ccloud.properties test2"
 
   - name: consumer
     command: |
-      gp sync-await properties && gp sync-await setup
+      gp sync-await properties
       mvn exec:java -Dexec.mainClass="io.confluent.examples.clients.cloud.ConsumerAvroExample" -Dexec.args="./ccloud.properties test2"
 
   - name: kafka streams
     command: |
-      gp sync-await properties && gp sync-await setup
+      gp sync-await properties
       mvn exec:java -Dexec.mainClass="io.confluent.examples.clients.cloud.StreamsAvroExample" -Dexec.args="./ccloud.properties test2"
 
   # Dynamically configure confluent cloud properties file at launch
@@ -51,15 +54,7 @@ tasks:
 
   # Install ccloud CLI and Java project dependencies at build time, then ccloud login at launch time
   - name: ccloud
-    before: |
-      curl -L --http1.1 https://cnfl.io/ccloud-cli | sudo sh -s -- -b /usr/local/bin && \
-        mkdir -p ~/.local/share/bash-completion/ && \
-        touch ~/.local/share/bash-completion/ccloud && \
-        ccloud completion bash > ~/.local/share/bash-completion/ccloud && \
-        source ~/.local/share/bash-completion/ccloud && \
-        echo "source ~/.local/share/bash-completion/ccloud" >> ~/.bashrc
-    init: rm -rf ~/.m2 && rm -rf /workspace/m2-repository/ && mvn clean:clean package
-    command: ccloud login --save && gp sync-done setup && ccloud environment use $CCLOUD_ENV_ID
+    command: ccloud login --save && ccloud environment use $CCLOUD_ENV_ID
 
 vscode:
   extensions:
