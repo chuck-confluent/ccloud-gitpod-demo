@@ -16,4 +16,4 @@ COPY . /usr/src/app
 WORkDIR /usr/src/app
 
 # build maven project
-RUN sudo mvn clean package
+RUN sudo /home/gitpod/.sdkman/candidates/maven/current/binmvn clean package
