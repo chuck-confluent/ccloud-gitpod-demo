@@ -1,4 +1,4 @@
-FROM gitpod/workspace-full
+FROM gitpod/workspace-full:latest
 
 SHELL ["/bin/bash", "-c"]
 
