@@ -1,5 +1,7 @@
 FROM gitpod/workspace-full
 
+SHELL ["/bin/bash", "-c"]
+
 # install ccloud CLI with shell autocompletion
 RUN curl -L --http1.1 https://cnfl.io/ccloud-cli | sudo sh -s -- -b /usr/local/bin && \
     touch ~/.local/share/bash-completion/ccloud && \
