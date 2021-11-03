@@ -1,7 +1,7 @@
 FROM gitpod/workspace-full:latest
 
 SHELL ["/bin/bash", "-c"]
-ENV PATH=/home/gitpod/.sdkman/candidates/java/current/bin:$PATH
+ENV PATH=/home/gitpod/.sdkman/candidates/maven/current/bin:/home/gitpod/.sdkman/candidates/java/current/bin:$PATH
 ENV JAVA_HOME=/home/gitpod/.sdkman/candidates/java/current
 
 # install ccloud CLI with shell autocompletion
@@ -13,4 +13,5 @@ RUN curl -L --http1.1 https://cnfl.io/ccloud-cli | sudo sh -s -- -b /usr/local/b
     echo "source /home/gitpod/.local/share/bash-completion/ccloud" >> ~/.bashrc
 
 # build maven project
-RUN /home/gitpod/.sdkman/candidates/maven/current/bin/mvn clean package
+RUN mkdir -p /workspace/m2-repository && \
+    mvn clean package
