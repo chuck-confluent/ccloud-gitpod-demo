@@ -12,6 +12,9 @@ RUN curl -L --http1.1 https://cnfl.io/ccloud-cli | sudo sh -s -- -b /usr/local/b
     touch /home/gitpod/.local/share/bash-completion/confluent && \
     echo "source /home/gitpod/.local/share/bash-completion/ccloud" >> ~/.bashrc
 
+COPY . /usr/src/app
+WORkDIR /usr/src/app
+
 # build maven project
 RUN sudo mkdir -p /workspace/m2-repository && \
     mvn clean package
