@@ -58,7 +58,7 @@ tasks:
         ccloud completion bash > ~/.local/share/bash-completion/ccloud && \
         source ~/.local/share/bash-completion/ccloud && \
         echo "source ~/.local/share/bash-completion/ccloud" >> ~/.bashrc
-    init: mvn clean package
+    init: rm -rf ~/.m2 && mvn clean package
     command: ccloud login --save && gp sync-done setup && ccloud environment use $CCLOUD_ENV_ID
 
 vscode:
