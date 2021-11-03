@@ -16,5 +16,4 @@ COPY . /usr/src/app
 WORkDIR /usr/src/app
 
 # build maven project
-RUN sudo mkdir -p /workspace/m2-repository && \
-    mvn clean package
+RUN sudo mvn clean package
