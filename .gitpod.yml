@@ -60,7 +60,7 @@ tasks:
       basic.auth.user.info=$CCLOUD_SR_API_KEY:$CCLOUD_SR_API_SECRET
       EOF
     init: mvn clean package
-    command: ccloud login --save && ccloud environment use $CCLOUD_ENV_ID
+    command: confluent login --save && confluent environment use $CCLOUD_ENV_ID
 
 vscode:
   extensions:

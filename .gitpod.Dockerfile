@@ -2,10 +2,9 @@ FROM gitpod/workspace-full:latest
 
 SHELL ["/bin/bash", "-c"]
 
-# install ccloud CLI with shell autocompletion
-RUN curl -L --http1.1 https://cnfl.io/ccloud-cli | sudo sh -s -- -b /usr/local/bin && \
+# install confluent CLI v2.0 with shell autocompletion
+RUN curl -sL --http1.1 https://cnfl.io/cli | sh -s -- -b /usr/local/bin v2.0.0 && \
     mkdir -p /home/gitpod/.local/share/bash-completion && \
-    touch /home/gitpod/.local/share/bash-completion/ccloud && \
-    ccloud completion bash > /home/gitpod/.local/share/bash-completion/ccloud && \
     touch /home/gitpod/.local/share/bash-completion/confluent && \
-    echo "source /home/gitpod/.local/share/bash-completion/ccloud" >> ~/.bashrc
+    confluent completion bash > /home/gitpod/.local/share/bash-completion/confluent && \
+    echo "source /home/gitpod/.local/share/bash-completion/confluent" >> ~/.bashrc
