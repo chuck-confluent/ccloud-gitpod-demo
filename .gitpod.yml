@@ -20,8 +20,8 @@ tasks:
     command: |
       gp sync-await properties
       mvn exec:java -Dexec.mainClass="io.confluent.examples.clients.cloud.ProducerAvroExample" -Dexec.args="./ccloud.properties test2"
-      sleep 3
       gp sync-done producer
+      sleep 5
       mvn exec:java -Dexec.mainClass="io.confluent.examples.clients.cloud.ProducerAvroExample" -Dexec.args="./ccloud.properties test2"
 
   - name: consumer
@@ -36,8 +36,11 @@ tasks:
       gp sync-await producer
       mvn exec:java -Dexec.mainClass="io.confluent.examples.clients.cloud.StreamsAvroExample" -Dexec.args="./ccloud.properties test2"
 
-  # Dynamically configure confluent cloud properties file at launch
-  - name: ccloud.properties
+
+  # Dynamically create unique ccloud properties file
+  # Install Java project dependencies at build time
+  # Then ccloud login at launch time
+  - name: setup
     before: |
       cat<<-EOF>ccloud.properties && gp sync-done properties
       # Required connection configs for Kafka producer, consumer, and admin
@@ -56,9 +59,6 @@ tasks:
       basic.auth.credentials.source=USER_INFO
       basic.auth.user.info=$CCLOUD_SR_API_KEY:$CCLOUD_SR_API_SECRET
       EOF
-
-  # Install ccloud CLI and Java project dependencies at build time, then ccloud login at launch time
-  - name: ccloud
     init: mvn clean package
     command: ccloud login --save && ccloud environment use $CCLOUD_ENV_ID
 
