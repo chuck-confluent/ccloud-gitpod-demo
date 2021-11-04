@@ -11,8 +11,6 @@ github:
     # configure whether Gitpod registers itself as a status check to pull requests
     addCheck: false
 
-image:
-  file: .gitpod.Dockerfile
 
 tasks:
 
@@ -20,15 +18,20 @@ tasks:
     command: |
       gp sync-await properties
       mvn exec:java -Dexec.mainClass="io.confluent.examples.clients.cloud.ProducerAvroExample" -Dexec.args="./ccloud.properties test2"
+      sleep 3
+      gp sync-done producer
+      mvn exec:java -Dexec.mainClass="io.confluent.examples.clients.cloud.ProducerAvroExample" -Dexec.args="./ccloud.properties test2"
 
   - name: consumer
     command: |
       gp sync-await properties
+      gp sync-await producer
       mvn exec:java -Dexec.mainClass="io.confluent.examples.clients.cloud.ConsumerAvroExample" -Dexec.args="./ccloud.properties test2"
 
   - name: kafka streams
     command: |
       gp sync-await properties
+      gp sync-await producer
       mvn exec:java -Dexec.mainClass="io.confluent.examples.clients.cloud.StreamsAvroExample" -Dexec.args="./ccloud.properties test2"
 
   # Dynamically configure confluent cloud properties file at launch
@@ -54,6 +57,7 @@ tasks:
 
   # Install ccloud CLI and Java project dependencies at build time, then ccloud login at launch time
   - name: ccloud
+    init: mvn clean package
     command: ccloud login --save && ccloud environment use $CCLOUD_ENV_ID
 
 vscode:
