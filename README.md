@@ -12,7 +12,7 @@ You can find the documentation and instructions for running this Java example at
 1. Create a Confuent Cloud account at https://confluent.cloud, create a cluster, and then create a schema registry.
 2. Create a API keys for your cluster and schema registry.
 3. Finally, make sure these environment variables are set at https://gitpod.io/variables and scoped to this repository
-  - `CONFLUENT_CLOUD_PASSWORD` (for the `confluent` CLI)
+  - `CONFLUENT_CLOUD_EMAIL` (for the `confluent` CLI)
   - `CONFLUENT_CLOUD_PASSWORD` (for the `confluent` CLI)
   - `CCLOUD_ENV_ID` (to choose a specific environment for the `confluent` CLI)
   - `CCLOUD_API_KEY`
